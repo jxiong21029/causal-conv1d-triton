@@ -1,7 +1,7 @@
 # causal-conv1d-triton
 
-A triton port of [causal-conv1d](https://github.com/Dao-AILab/causal-conv1d)
-with channels-last inputs.
+A Triton port of [causal-conv1d](https://github.com/Dao-AILab/causal-conv1d) with channels-last
+inputs.
 
 ```python
 out[b, t, d] = act(bias[d] + sum_k weight[d, k] * x[b, t - (W - 1) + k, d])
@@ -45,3 +45,15 @@ out2 = causal_conv1d_fn(x[:, 512:], weight, bias, initial_states=state)
   same sequence, negative ids are padding (output 0), and `initial_states` count as part of
   `seq_idx[:, 0]`'s sequence. Can't be combined with `return_final_states`
 - Launch heuristics were tuned on an H200
+
+## Benchmarks
+
+H200, bf16, `dim=1024`, `width=4`.
+
+No bias, no activation:
+
+![latency, no bias + no activation](plots/latency_weight_only.png)
+
+With bias and silu activations:
+
+![latency, bias + silu](plots/latency_bias_silu.png)
