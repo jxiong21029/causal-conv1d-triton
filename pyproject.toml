@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "causal-conv1d-triton"
+version = "0.1.0"
+description = "A triton port of causal-conv1d <https://github.com/Dao-AILab/causal-conv1d>"
+readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+# Triton only ships Linux wheels. The kernels need tuples in @triton.jit, added in 3.3.
+dependencies = ["torch", "triton>=3.3; sys_platform == 'linux'"]
+
+[tool.setuptools.packages.find]
+include = ["causal_conv1d_triton*"]
+
+[tool.ruff]
+line-length = 100
